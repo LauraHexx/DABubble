@@ -82,10 +82,12 @@
   <div class="continue-container">
     <button
       [disabled]="
-        choosenAvatar === null && this.storService.channelCurrentUrl === null
+        choosenAvatar === null &&
+        this.storService.channelCurrentUrl === undefined
       "
       [class.btn-no-image-selected]="
-        choosenAvatar === null && this.storService.channelCurrentUrl === null
+        choosenAvatar === null &&
+        this.storService.channelCurrentUrl === undefined
       "
       class="button-layout"
       (click)="createNewUser()"
