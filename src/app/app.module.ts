@@ -41,7 +41,6 @@ import { SettingsUserDataMessageComponent } from './components-sub/settings-user
 import { WorkspacebuttonComponent } from './components-sub/workspacebutton/workspacebutton.component';
 import { GoogleScreenComponent } from './components/login/google-screen/google-screen.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,8 +73,7 @@ import { GoogleScreenComponent } from './components/login/google-screen/google-s
     SettingsUserDataComponent,
     SettingsEditUserDataComponent,
     SettingsUserDataMessageComponent,
-    GoogleScreenComponent
-    
+    GoogleScreenComponent,
 
     // PickerComponent,
   ],
@@ -88,12 +86,12 @@ import { GoogleScreenComponent } from './components/login/google-screen/google-s
     ReactiveFormsModule,
     provideFirebaseApp(() =>
       initializeApp({
-        projectId: 'dabubble-d4948',
-        appId: '1:567130022113:web:caa3fc9e6b5e87cff357a0',
-        storageBucket: 'dabubble-d4948.appspot.com',
-        apiKey: 'AIzaSyCgNO6pPE0zcljEZxH6OacoaO2DywdeFxs',
-        authDomain: 'dabubble-d4948.firebaseapp.com',
-        messagingSenderId: '567130022113',
+        apiKey: 'AIzaSyCbiTC1qyjpxXwcCBW2zo0h2fBtbyreN-Y',
+        authDomain: 'dabubble-1fa5e.firebaseapp.com',
+        projectId: 'dabubble-1fa5e',
+        storageBucket: 'dabubble-1fa5e.appspot.com',
+        messagingSenderId: '443674511916',
+        appId: '1:443674511916:web:481bf8b2c7794154005f89',
       })
     ),
     provideAuth(() => getAuth()),
