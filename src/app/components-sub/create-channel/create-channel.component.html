@@ -37,7 +37,7 @@
         </div>
 
         <div class="channel-property">
-          <div class="channel-property-title">Beschreibung (optional)</div>
+          <div class="channel-property-title">Beschreibung</div>
           <input
             [(ngModel)]="this.ws.inputDescription"
             (input)="sis.allFieldsFilled(us.userLoggedIn())"
@@ -59,7 +59,11 @@
         </div>
 
         <div class="options">
-          <div *ngIf="ws.getChannels()[0]" class="option" (click)="changeRadioButton()">
+          <div
+            *ngIf="ws.getChannels()[0]"
+            class="option"
+            (click)="changeRadioButton()"
+          >
             <div class="radio-wrap">
               <img
                 *ngIf="!this.ws.radioButtonFirst"
@@ -132,7 +136,8 @@
     <!-- User Auswahl-Menü -->
     <div
       *ngIf="this.ws.showAddMembers && !this.ws.radioButtonFirst"
-      class="choose-members-wrap" [ngClass]="{'no-border-radius-top': !rs.mobileMode()}"
+      class="choose-members-wrap"
+      [ngClass]="{ 'no-border-radius-top': !rs.mobileMode() }"
     >
       <div class="first-line">
         <div class="headline-white-box">Mitglieder</div>
