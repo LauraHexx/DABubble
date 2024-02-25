@@ -20,8 +20,10 @@ export class CreateChannelComponent {
     public cs: ChannelService,
     public sis: SearchInputService,
     public us: UserService,
-    public rs: ResponsiveService,
-  ) { this.showLengthInfo = false; }
+    public rs: ResponsiveService
+  ) {
+    this.showLengthInfo = false;
+  }
 
   changeRadioButton() {
     return (this.ws.radioButtonFirst = this.ws.radioButtonFirst ? false : true);
@@ -32,8 +34,12 @@ export class CreateChannelComponent {
     this.sis.allFieldsFilled(this.us.userLoggedIn());
     this.showLengthInfo = this.ws.inputName.length === this.maxNameLength;
 
-    setTimeout(()=>{
+    setTimeout(() => {
       this.showLengthInfo = false;
     }, 10000);
+  }
+
+  preventParentClick(event: any) {
+    event.stopPropagation();
   }
 }
