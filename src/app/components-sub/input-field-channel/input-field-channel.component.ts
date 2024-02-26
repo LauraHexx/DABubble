@@ -10,7 +10,6 @@ import { StorageService } from 'src/app/shared/services/storage.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { WorkspaceService } from 'src/app/shared/services/workspace.service';
 
-
 @Component({
   selector: 'app-input-field-channel',
   templateUrl: './input-field-channel.component.html',
@@ -41,17 +40,18 @@ export class InputFieldChannelComponent {
     private _eref: ElementRef,
     public storService: StorageService,
     private ws: WorkspaceService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getCurrentChannel();
-    this.ws.getEnterKeyPress().subscribe(event => {
+    this.ws.getEnterKeyPress().subscribe((event) => {
       this.sendMessage();
     });
-
   }
 
-
+  ngAfterViewInit() {
+    this.ws.setAutofocus('inputChannel');
+  }
 
   fileExplorer(event: any): void {
     this.fileInputRef = event.target as HTMLInputElement;
@@ -62,7 +62,6 @@ export class InputFieldChannelComponent {
       this.btnVisible();
       this.storService.uploadToStorage(this.selectedFile);
       this.endLoading();
-
     }
   }
 
@@ -70,9 +69,8 @@ export class InputFieldChannelComponent {
     this.loader = true;
     setTimeout(() => {
       this.loader = false;
-    }, 1200)
+    }, 1200);
   }
-
 
   sendMessage(): void {
     if (this.input !== '' || this.selectedFile) {
@@ -80,10 +78,16 @@ export class InputFieldChannelComponent {
         userCustomId: this.us.userLoggedIn().customId,
         messageId: Date.now(),
         message: this.ws.separateLongWords(this.input),
-        createdTime: this.cs.getCleanMessageTimeJson(new MessageTime(new Date().getDate(), this.cs.todaysDate(), this.cs.getTime())),
+        createdTime: this.cs.getCleanMessageTimeJson(
+          new MessageTime(
+            new Date().getDate(),
+            this.cs.todaysDate(),
+            this.cs.getTime()
+          )
+        ),
         emojis: [{ path: '', amount: 0, setByUser: [''] }],
         threads: [],
-        // ↓ file already uploaded 
+        // ↓ file already uploaded
         file: this.storService.getUrlFromStorage(),
       };
 
@@ -95,8 +99,6 @@ export class InputFieldChannelComponent {
     this.clearAll();
   }
 
-
-
   clearAll() {
     this.clearFileInput();
     this.clearSelectedFile();
@@ -104,10 +106,9 @@ export class InputFieldChannelComponent {
     this.clearInput();
     this.clearUrl();
     this.service.inputFilled = false;
-
   }
   clearUrl() {
-    this.storService.channelCurrentUrl = "";
+    this.storService.channelCurrentUrl = '';
   }
 
   clearFileInput() {
@@ -120,18 +121,13 @@ export class InputFieldChannelComponent {
     this.selectedFile = null;
   }
 
-
-
-
   inputIsFilled() {
-    if (this.input !== "") {
+    if (this.input !== '') {
       this.service.inputFilled = true;
     } else {
       this.service.inputFilled = false;
     }
   }
-
-
 
   // fills allMembers array with all users in the current channel
   getCurrentChannel() {
@@ -207,16 +203,10 @@ export class InputFieldChannelComponent {
     this.showUserList = false;
   }
 
-
-
   btnVisible(): void {
     this.service.isWritingChannel = true;
   }
   btnNotVisible(): void {
     this.service.isWritingChannel = false;
   }
-
-
-
-
 }

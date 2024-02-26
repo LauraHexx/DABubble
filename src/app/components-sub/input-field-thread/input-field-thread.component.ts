@@ -6,7 +6,6 @@ import { StorageService } from 'src/app/shared/services/storage.service';
 import { ThreadService } from 'src/app/shared/services/thread.service';
 import { WorkspaceService } from 'src/app/shared/services/workspace.service';
 
-
 @Component({
   selector: 'app-input-field-thread',
   templateUrl: './input-field-thread.component.html',
@@ -23,14 +22,19 @@ export class InputFieldThreadComponent {
   private fileInputRef: HTMLInputElement | undefined;
   selectedFile: File | null = null;
   loader: boolean = false;
-  
-  constructor(public service: InputService, 
-    public cs: ChannelService, 
-    private _eref: ElementRef, 
-    private ts: ThreadService, 
-    public storService: StorageService,
-    private ws: WorkspaceService, ) {}
 
+  constructor(
+    public service: InputService,
+    public cs: ChannelService,
+    private _eref: ElementRef,
+    private ts: ThreadService,
+    public storService: StorageService,
+    private ws: WorkspaceService
+  ) {}
+
+  ngAfterViewInit() {
+    this.ws.setAutofocus('inputThread');
+  }
 
   fileExplorer(event: any): void {
     this.fileInputRef = event.target as HTMLInputElement;
@@ -41,16 +45,14 @@ export class InputFieldThreadComponent {
       this.btnVisible();
       this.storService.uploadToStorage(this.selectedFile);
       this.endLoading();
-
     }
-
   }
 
-  endLoading(){
+  endLoading() {
     this.loader = true;
-    setTimeout(() =>{
+    setTimeout(() => {
       this.loader = false;
-    }, 1200)
+    }, 1200);
   }
 
   clearAll() {
@@ -64,7 +66,7 @@ export class InputFieldThreadComponent {
   clearSelectedFile() {
     this.selectedFile = null;
   }
-  
+
   clearInput() {
     this.input = '';
   }
@@ -75,9 +77,8 @@ export class InputFieldThreadComponent {
   }
 
   clearUrl() {
-    this.storService.channelCurrentUrl = "";
+    this.storService.channelCurrentUrl = '';
   }
-
 
   btnVisible(): void {
     this.service.isWritingThread = true;
@@ -90,17 +91,17 @@ export class InputFieldThreadComponent {
   ngOnInit(): void {
     this.getCurrentChannel();
 
-    this.ws.getEnterKeyPress().subscribe(event => {
+    this.ws.getEnterKeyPress().subscribe((event) => {
       // sendThreadMessage aufrufen, wenn die Enter-Taste gedrückt wird
       this.sendThreadMessage();
     });
   }
-  
+
   sendThreadMessage() {
     if (this.input !== '' || this.selectedFile) {
       this.ts.addThreadAnswer(this.ws.separateLongWords(this.input));
       this.clearAll();
-      this.ws.scrollToBottom('scrollThreadMessages') 
+      this.ws.scrollToBottom('scrollThreadMessages');
     }
   }
 
@@ -109,7 +110,7 @@ export class InputFieldThreadComponent {
     this.cs.clickedChannel.subscribe((ch: Channel) => {
       this.ts.clickedChannel = ch;
       this.allMembers = [];
-      this.allMembers.push(this.ts.clickedChannel.members);     
+      this.allMembers.push(this.ts.clickedChannel.members);
     });
   }
   addEmoji($event: any) {
@@ -120,8 +121,6 @@ export class InputFieldThreadComponent {
   collectMemberFromList(item: any) {
     this.input += '@' + item;
     this.closeShowUserList();
-  
-
   }
   closeShowUserList() {
     this.showUserList = false;

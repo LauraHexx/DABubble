@@ -9,7 +9,6 @@ import { StorageService } from 'src/app/shared/services/storage.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { WorkspaceService } from 'src/app/shared/services/workspace.service';
 
-
 @Component({
   selector: 'app-input-field-message',
   templateUrl: './input-field-message.component.html',
@@ -36,18 +35,22 @@ export class InputFieldMessageComponent {
     public ws: WorkspaceService,
     private _eref: ElementRef,
     public storService: StorageService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getCurrentUser();
 
-    this.ws.getEnterKeyPress().subscribe(event => {
-      // sendDirectMessage aufrufen, wenn die Enter-Taste gedrückt wird    
+    this.ws.getEnterKeyPress().subscribe((event) => {
+      // sendDirectMessage aufrufen, wenn die Enter-Taste gedrückt wird
       if (this.router.url === '/dashboard/new-message') {
-        this.router.navigate(['dashboard', 'message']);               
+        this.router.navigate(['dashboard', 'message']);
       }
-      this.sendDirectMessage(); 
+      this.sendDirectMessage();
     });
+  }
+
+  ngAfterViewInit() {
+    this.ws.setAutofocus('inputMessage');
   }
 
   getCurrentUser() {
@@ -70,7 +73,7 @@ export class InputFieldMessageComponent {
         this.us.userLoggedIn()
       );
       this.clearAll();
-      this.ws.scrollToBottom('scrollDirectMessages')
+      this.ws.scrollToBottom('scrollDirectMessages');
     }
   }
 
@@ -93,12 +96,11 @@ export class InputFieldMessageComponent {
     this.clearInput();
     this.clearUrl();
     this.service.inputFilled = false;
-
   }
 
-  // clean help-functions 
+  // clean help-functions
   clearUrl() {
-    this.storService.channelCurrentUrl = "";
+    this.storService.channelCurrentUrl = '';
   }
 
   clearFileInput() {
@@ -115,7 +117,6 @@ export class InputFieldMessageComponent {
   }
   //
 
-
   // added try and finally because (variables have to be cleared) after return...
   addNewMessage(messageId: number) {
     try {
@@ -128,19 +129,26 @@ export class InputFieldMessageComponent {
             new MessageTime(
               new Date().getDate(),
               this.cs.todaysDate(),
-              this.cs.getTime(),
-            ),
+              this.cs.getTime()
+            )
           ),
           [{ path: '', amount: 0, setByUser: [''] }],
-          [{ userCustomId: '', messageId: 0, answer: '', emojis: [{ path: '', amount: 0, setByUser: [''] }], createdTime: 0 }],
-          this.storService.getUrlFromStorage(),
-        ),
+          [
+            {
+              userCustomId: '',
+              messageId: 0,
+              answer: '',
+              emojis: [{ path: '', amount: 0, setByUser: [''] }],
+              createdTime: 0,
+            },
+          ],
+          this.storService.getUrlFromStorage()
+        )
       );
     } catch (err) {
-      return
+      return;
     }
   }
-
 
   // Für emojis und @
   addEmoji($event: any) {
@@ -166,7 +174,6 @@ export class InputFieldMessageComponent {
     if (!this._eref.nativeElement.contains(event.target)) this.closeAllDivs();
   }
 
-
   fileExplorer(event: any): void {
     this.fileInputRef = event.target as HTMLInputElement;
     const inputElement = event.target as HTMLInputElement;
@@ -176,25 +183,18 @@ export class InputFieldMessageComponent {
       this.btnVisible();
       this.storService.uploadToStorage(this.selectedFile);
       this.endLoading();
-
     }
-
   }
   endLoading() {
     this.loader = true;
     setTimeout(() => {
       this.loader = false;
-    }, 1200)
+    }, 1200);
   }
   btnVisible(): void {
     this.service.isWritingMessage = true;
-
-
-
   }
   btnNotVisible(): void {
     this.service.isWritingMessage = false;
-
-
   }
 }

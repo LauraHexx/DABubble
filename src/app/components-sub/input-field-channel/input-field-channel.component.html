@@ -1,11 +1,24 @@
 <div class="input-box-container">
-  <input type="text" (input)="this.service.onInputChannel($event)" placeholder="Nachricht an #{{clickedChannel.name}}"
-    [ngClass]="{'selected-input': isInputSelected}" [(ngModel)]="input" />
+  <input
+    id="inputChannel"
+    type="text"
+    (input)="this.service.onInputChannel($event)"
+    placeholder="Nachricht an #{{ clickedChannel.name }}"
+    [ngClass]="{ 'selected-input': isInputSelected }"
+    [(ngModel)]="input"
+  />
 
   <div class="bottom-container-of-input">
     <div class="add-data-to-input-box-container">
       <div class="add-icon-container">
-        <input (change)="fileExplorer($event)"  type="file" id="file" value="" name="avatar" accept="image/png, image/jpeg" />
+        <input
+          (change)="fileExplorer($event)"
+          type="file"
+          id="file"
+          value=""
+          name="avatar"
+          accept="image/png, image/jpeg"
+        />
         <img class="add-icon-normal" src="assets/icons/add-grey.png" />
         <img class="add-icon-purple" src="assets/icons/add_purple.png" />
       </div>
@@ -16,18 +29,38 @@
           <img class="att-icon-purple" src="assets/icons/@-icon-purple.png" />
         </div>
         <div (click)="toggleBtn('emojis')" class="smiley-icons-container">
-          <img class="smiley-icon-grey" src="assets/icons/smiley-icon-grey.png" />
-          <img class="smiley-icon-purple" src="assets/icons/smiley-icon-purple.png" />
+          <img
+            class="smiley-icon-grey"
+            src="assets/icons/smiley-icon-grey.png"
+          />
+          <img
+            class="smiley-icon-purple"
+            src="assets/icons/smiley-icon-purple.png"
+          />
         </div>
         <div class="file-container" *ngIf="selectedFile">
           {{ selectedFile.name }}
         </div>
       </div>
     </div>
-    
-    <div routerLink="../channel" (click)="sendMessage(); this.storService.uploadToStorage(this.selectedFile);" class="send-btn-container">
-      <img *ngIf="!this.service.isWritingChannel && !this.loader" class="send-btn-false" src="assets/icons/disabeld_send-icon.png" />
-      <img *ngIf="this.service.isWritingChannel && !this.loader" class="send-btn-true" src="assets/icons/send.png" />
+
+    <div
+      routerLink="../channel"
+      (click)="
+        sendMessage(); this.storService.uploadToStorage(this.selectedFile)
+      "
+      class="send-btn-container"
+    >
+      <img
+        *ngIf="!this.service.isWritingChannel && !this.loader"
+        class="send-btn-false"
+        src="assets/icons/disabeld_send-icon.png"
+      />
+      <img
+        *ngIf="this.service.isWritingChannel && !this.loader"
+        class="send-btn-true"
+        src="assets/icons/send.png"
+      />
       <span *ngIf="this.loader" class="loader"></span>
     </div>
   </div>
@@ -35,7 +68,14 @@
   <div *ngIf="showUserList" class="members-of-channel">
     <div *ngFor="let member of allMembers">
       <div *ngFor="let name of member">
-        <div (click)="collectMemberFromList(name.name); this.service.isWritingChannel = true;" id="{{ name.customId }}" class="users-list">
+        <div
+          (click)="
+            collectMemberFromList(name.name);
+            this.service.isWritingChannel = true
+          "
+          id="{{ name.customId }}"
+          class="users-list"
+        >
           <div>
             <img class="user-list-img" src="assets/imgs/userMale1.png" alt="" />
           </div>
@@ -46,10 +86,8 @@
   </div>
 
   <div id="emoji-container" *ngIf="showEmojis">
-    <emoji-mart (emojiClick)="addEmoji($event); this.service.isWritingChannel = true;" ></emoji-mart>
+    <emoji-mart
+      (emojiClick)="addEmoji($event); this.service.isWritingChannel = true"
+    ></emoji-mart>
   </div>
-
-  
-  
-
 </div>

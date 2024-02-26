@@ -9,7 +9,7 @@
   align-items: center;
   gap: 10px;
   height: 100%;
-
+  margin-top: 16px;
   app-side-left {
     display: flex;
     height: 100%;
@@ -18,11 +18,11 @@
 
 .router {
   height: 100%;
- 
+
   flex: 1;
 }
 
-app-mobile-header{
+app-mobile-header {
   display: none;
   margin-bottom: 10px;
 }
@@ -30,21 +30,19 @@ app-mobile-header{
 app-side-right {
   display: flex;
   height: 100%;
-  
 }
 
-
-@media (max-width:960px) {
-  app-header{
+@media (max-width: 960px) {
+  app-header {
     display: none;
   }
-  app-mobile-header{
+  app-mobile-header {
     display: block;
   }
 }
 
-@media (max-width:610px) {
-  app-mobile-header{
+@media (max-width: 610px) {
+  app-mobile-header {
     margin-bottom: 0px;
   }
 }

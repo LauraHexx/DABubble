@@ -32,18 +32,17 @@ export class SideLeftComponent {
     public cs: ChannelService,
     public respService: ResponsiveService,
     public auth: AuthenticationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.notExpired = false
+      this.notExpired = false;
     }, 10000);
   }
 
-  showHints(){
+  showHints() {
     return this.notExpired && this.ws.getUsers().length === 1;
   }
-
 
   clickDownArrowChannels() {
     this.arrowClickedChannels = this.rightArrowChannels =
@@ -66,6 +65,7 @@ export class SideLeftComponent {
     this.cs.setChannelView(cn.customId);
     this.cs.getAllMessagesFromChannel(cn.customId);
     this.ws.scrollToBottom('scrollChannelMessages');
+    this.ws.setAutofocus('inputChannel');
   }
 
   async setContact(user: User) {
