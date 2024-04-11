@@ -2,8 +2,9 @@
   class="wrap"
   *ngIf="this.ws.showCreateChannel"
   [ngClass]="{ 'align-items-flex-start': this.ws.showAddMembers }"
+  (click)="this.ws.openCloseCreateChannel(); sis.clearChannelJSON()"
 >
-  <div class="wrap-dialog-choose-members">
+  <div (click)="$event.stopPropagation()" class="wrap-dialog-choose-members">
     <div
       class="dialog"
       [ngClass]="{
