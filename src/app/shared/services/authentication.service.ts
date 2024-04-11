@@ -50,7 +50,7 @@ export class AuthenticationService {
     private userService: UserService,
     private cs: ChannelService,
     private router: Router
-  ) { }
+  ) {}
 
   /**
    * Signs up a new user with the provided user information and password.
@@ -67,8 +67,14 @@ export class AuthenticationService {
         newUser.customId = user.uid;
         newUser.status = 'offline';
         newUser.chats = this.setDefaultMessage();
-        // Create own Chat        
-        newUser.chats.push(this.createDefaultMessage(Date.now(), user.uid, 'Eigener Chat. Ich bin einziger Empfänger.'));
+        // Create own Chat
+        newUser.chats.push(
+          this.createDefaultMessage(
+            Date.now(),
+            user.uid,
+            'Eigener Chat. Ich bin einziger Empfänger.'
+          )
+        );
         this.userService.sendDocToDB(newUser);
       })
       .then(() => {
@@ -86,11 +92,15 @@ export class AuthenticationService {
    */
   setDefaultMessage() {
     let messageId = Date.now();
-    let defaultUserId = 'lb8OZ3BDULhTkFDDS7OK8kNIISt1';
-    let messageText = 'Hi';
+    let defaultUserId = 'dIff3pJzF8THciXEMLnjfJA9Zto2';
+    let messageText = 'Hi, deine Präsentation war echt super!';
 
     // Nachricht bei eingeloggtem User speichern
-    let defaultMessage = this.createDefaultMessage(messageId, defaultUserId, messageText);
+    let defaultMessage = this.createDefaultMessage(
+      messageId,
+      defaultUserId,
+      messageText
+    );
 
     // Nachricht bei Default-User Sophia speichern
     this.userService.updateDefaultUser(
@@ -101,7 +111,11 @@ export class AuthenticationService {
     return [defaultMessage];
   }
 
-  createDefaultMessage(messageId: number, defaultUserId: string, messageText: string) {
+  createDefaultMessage(
+    messageId: number,
+    defaultUserId: string,
+    messageText: string
+  ) {
     return new Message(
       defaultUserId,
       messageId,
@@ -259,8 +273,8 @@ export class AuthenticationService {
     await this.userService.updateUser({ status: 'offline' }, this.loggedUser);
     const auth = getAuth();
     signOut(auth)
-      .then(() => { })
-      .catch((error) => { });
+      .then(() => {})
+      .catch((error) => {});
   }
 
   /**
@@ -270,7 +284,7 @@ export class AuthenticationService {
   sendEmailToResetPw(email: string) {
     const auth = getAuth();
     sendPasswordResetEmail(auth, email)
-      .then(() => { })
+      .then(() => {})
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
