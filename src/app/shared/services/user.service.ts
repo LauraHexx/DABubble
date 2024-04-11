@@ -81,12 +81,12 @@ export class UserService {
         console.error(err);
       })
       .then(() => {
-        return
+        return;
       });
   }
 
-   /**
-   * Aktualisiert den Standardbenutzer Sophia in der Datenbank.
+  /**
+   * Aktualisiert den Standardbenutzer in der Datenbank.
    * @param newValue - Die neuen Werte für den Benutzer.
    * @param customId - Die benutzerdefinierte ID des zu aktualisierenden Benutzers Sophia.
    */
@@ -97,7 +97,7 @@ export class UserService {
         console.error(err);
       })
       .then(() => {
-        return
+        return;
       });
   }
 
@@ -220,7 +220,6 @@ export class UserService {
     });
   }
 
-
   /**
    * Es werden nur Nachrichten angezeigt die (a) ich clickedContact verschickt habe oder (b) die clickedContact an mich verschickt hat und
    * deren messageId bei mir existiert (damit nicht Nachrichten bei mir von clickedContact angezeigt werden, die er an andere User verschickt hat)
@@ -231,7 +230,8 @@ export class UserService {
     let userLoggedInCustomId = this.userLoggedIn().customId;
     // Bei eigenen Chat nur ausgehende Nachrichten
     if (this.clickedContact.value.customId === userLoggedInCustomId) {
-      chats = this.clickedContact.value.chats?.filter((chat) => this.onlyOwnChat(chat.messageId)
+      chats = this.clickedContact.value.chats?.filter((chat) =>
+        this.onlyOwnChat(chat.messageId)
       );
       // Bei allen anderen Chats
     } else {
@@ -247,7 +247,6 @@ export class UserService {
 
     return chats;
   }
-
 
   /**
    * Überprüft, ob eine Nachricht in den eigenen Chats existiert.
@@ -265,20 +264,22 @@ export class UserService {
    * @param ownMessageId - Die Nachrichten-ID für den eigenen Chat.
    * @returns True, wenn es sich um einen eigenen Chat handelt, sonst False.
    */
-  onlyOwnChat(ownMessageId: number): boolean {  
+  onlyOwnChat(ownMessageId: number): boolean {
     return this.myUsers.every((user) => {
       return !user.chats?.some((chat) => {
-        return chat.messageId === ownMessageId && user.customId !== this.userLoggedIn().customId;
+        return (
+          chat.messageId === ownMessageId &&
+          user.customId !== this.userLoggedIn().customId
+        );
       });
     });
   }
-  
 
   /**
- * Gibt den Benutzernamen für eine bestimmte Benutzer-ID zurück.
- * @param userCustomId - Die benutzerdefinierte ID des Benutzers.
- * @returns Der Benutzername oder 'loading', wenn der Benutzer nicht gefunden wird.
- */
+   * Gibt den Benutzernamen für eine bestimmte Benutzer-ID zurück.
+   * @param userCustomId - Die benutzerdefinierte ID des Benutzers.
+   * @returns Der Benutzername oder 'loading', wenn der Benutzer nicht gefunden wird.
+   */
   getUserName(userCustomId: string) {
     let user = this.allUsersForUserName.find(
       (user) => user.customId === userCustomId
@@ -287,20 +288,20 @@ export class UserService {
   }
 
   /**
- * Gibt den Bildpfad für das Benutzerbild basierend auf der Benutzer-ID zurück.
- * @param userCustomId - Die benutzerdefinierte ID des Benutzers.
- * @returns Der Default-Bildpfad oder 'assets/imgs/person.png', wenn der Benutzer nicht gefunden wird.
- */
+   * Gibt den Bildpfad für das Benutzerbild basierend auf der Benutzer-ID zurück.
+   * @param userCustomId - Die benutzerdefinierte ID des Benutzers.
+   * @returns Der Default-Bildpfad oder 'assets/imgs/person.png', wenn der Benutzer nicht gefunden wird.
+   */
   getUserImage(userCustomId: string) {
     let user = this.myUsers.find((user) => user.customId === userCustomId);
     return user ? user.img : 'assets/imgs/person.png';
   }
 
   /**
- * Gibt den Online-Status für einen Benutzer basierend auf seiner Benutzer-ID zurück.
- * @param userCustomId - Die benutzerdefinierte ID des Benutzers.
- * @returns Der Online-Status oder 'offline', wenn der Benutzer nicht gefunden wird.
- */
+   * Gibt den Online-Status für einen Benutzer basierend auf seiner Benutzer-ID zurück.
+   * @param userCustomId - Die benutzerdefinierte ID des Benutzers.
+   * @returns Der Online-Status oder 'offline', wenn der Benutzer nicht gefunden wird.
+   */
   getUserOnlineStats(userCustomId: string) {
     let user = this.myUsers.find((user) => user.customId === userCustomId);
     return user ? user.status : 'offline';

@@ -66,15 +66,9 @@ export class AuthenticationService {
         const user = userCredential.user;
         newUser.customId = user.uid;
         newUser.status = 'offline';
-        newUser.chats = this.setDefaultMessage();
-        // Create own Chat
-        newUser.chats.push(
-          this.createDefaultMessage(
-            Date.now(),
-            user.uid,
-            'Eigener Chat. Ich bin einziger Empfänger.'
-          )
-        );
+        newUser.chats = this.createDefaultChat(user.uid);
+      })
+      .then(() => {
         this.userService.sendDocToDB(newUser);
       })
       .then(() => {
@@ -87,28 +81,50 @@ export class AuthenticationService {
   }
 
   /**
-   * Sends a default message and updates the chat for the new user.
-   * @returns {Message[]} - An array containing the sent default message.
+   * Creates a default chat for the new user.
+   * @returns {Message[]} - An array containing the default chat messages.
    */
-  setDefaultMessage() {
-    let messageId = Date.now();
-    let defaultUserId = 'dIff3pJzF8THciXEMLnjfJA9Zto2';
-    let messageText = 'Hi, deine Präsentation war echt super!';
+  createDefaultChat(newUserId: string) {
+    let messages: Message[] = [];
 
-    // Nachricht bei eingeloggtem User speichern
-    let defaultMessage = this.createDefaultMessage(
-      messageId,
-      defaultUserId,
-      messageText
-    );
+    const exampleUsers = [
+      {
+        defaultUserId: newUserId, //Own User Chat
+        messageText: 'Eigener Chat. Ich bin einziger Empfänger.',
+      },
+      {
+        defaultUserId: 'KvB7soOGc1fnyF8K3xjLvHHQy2N2', //John Doe
+        messageText: 'Hallo, mit welcher Angular Version arbeitest du?',
+      },
+      {
+        defaultUserId: 'P9SIuIe2MNcDzp4yJX5RgOFZ7pG2', //Laura H
+        messageText:
+          'Hi, ich bin fertig mit dem Join-Projekt. Was hälst du davon?',
+      },
+      {
+        defaultUserId: '7ddJZBGgkQd60XZoQshl3SAKfVs2', //Erika Musterfrau
+        messageText: 'Deine Präsentation war echt top!',
+      },
+    ];
 
-    // Nachricht bei Default-User Sophia speichern
-    this.userService.updateDefaultUser(
-      { chats: [this.userService.getCleanMessageJson(defaultMessage)] },
-      defaultUserId
-    );
+    // Nachrichten für den Standard-Chat erstellen und Beispielbenutzern zuweisen
+    exampleUsers.forEach((user) => {
+      const messageId = Date.now();
+      const defaultMessage = this.createDefaultMessage(
+        messageId,
+        user.defaultUserId,
+        user.messageText
+      );
+      messages.push(defaultMessage);
+      if (user.defaultUserId != newUserId) {
+        this.userService.updateDefaultUser(
+          { chats: [this.userService.getCleanMessageJson(defaultMessage)] },
+          user.defaultUserId
+        );
+      }
+    });
 
-    return [defaultMessage];
+    return messages;
   }
 
   createDefaultMessage(
@@ -159,7 +175,7 @@ export class AuthenticationService {
           this.loggedGoggleUser.email = user.email || '';
           this.loggedGoggleUser.img =
             user.photoURL || 'assets/imgs/userMale3.png';
-          this.checkIfNewGoogleUser(user.email);
+          this.checkIfNewGoogleUser(user.email, user.uid);
         }
       })
       .catch((error) => {
@@ -172,7 +188,10 @@ export class AuthenticationService {
    * Queries the user collection with the provided email and adds the user if not found.
    * @param {string | null} emailToBeChecked - The email to be checked for new user status.
    */
-  async checkIfNewGoogleUser(emailToBeChecked: string | null) {
+  async checkIfNewGoogleUser(
+    emailToBeChecked: string | null,
+    newUserId: string
+  ) {
     const qu = query(this.allUserCol, where('email', '==', emailToBeChecked));
     onSnapshot(qu, (querySnapshot) => {
       let existingUser: boolean = false;
@@ -182,7 +201,7 @@ export class AuthenticationService {
           existingUser = true;
         });
       }
-      if (!existingUser) this.addNewGoogleUser();
+      if (!existingUser) this.addNewGoogleUser(newUserId);
     });
   }
 
@@ -190,8 +209,8 @@ export class AuthenticationService {
    * Adds a new Google-authenticated user to the database.
    * Initializes user chats with a default message and sends user data to the database.
    */
-  addNewGoogleUser() {
-    this.loggedGoggleUser.chats = this.setDefaultMessage();
+  addNewGoogleUser(newUserId: string) {
+    this.loggedGoggleUser.chats = this.createDefaultChat(newUserId);
     this.userService.sendDocToDB(this.loggedGoggleUser);
   }
 

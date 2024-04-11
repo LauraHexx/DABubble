@@ -29,7 +29,7 @@ export class AppComponent {
     private el: ElementRef,
     private zone: NgZone
   ) {
-    this.auth.getGoogleUserData();
+    //this.auth.getGoogleUserData();
   }
 
   ngOnInit() {
