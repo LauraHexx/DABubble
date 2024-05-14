@@ -181,8 +181,12 @@
   </div>
 
   <!-- Leute hinzufügen Feld -->
-  <div class="wrap" *ngIf="ws.showAddMembersInExistingChannel">
-    <div class="dialog add-members-mobile">
+  <div
+    (click)="switchShowAddMembersInExistingChannel()"
+    class="wrap"
+    *ngIf="ws.showAddMembersInExistingChannel"
+  >
+    <div (click)="$event.stopPropagation()" class="dialog add-members-mobile">
       <div class="first-line">
         <div class="headline-white-box">Leute hinzufügen</div>
         <div
