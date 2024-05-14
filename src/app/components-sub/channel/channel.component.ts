@@ -30,7 +30,8 @@ export class ChannelComponent {
     public sis: SearchInputService,
     public us: UserService,
     public rs: ResponsiveService,
-    public cos: ClickOutsideService, private elementRef: ElementRef
+    public cos: ClickOutsideService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +43,9 @@ export class ChannelComponent {
       this.clickedChannel = ch;
     });
 
-    this.cos.onClickOutside(this.elementRef, () => {this.ws.closeAddMembers();});
+    this.cos.onClickOutside(this.elementRef, () => {
+      this.ws.closeAddMembers();
+    });
   }
 
   showInfo() {
@@ -101,7 +104,7 @@ export class ChannelComponent {
    * Fügt vorherige Mitglieder dem Kanal hinzu.
    * Diese Funktion wird nur einmal pro Fenster-Aufruf aufgerufen.
    */
-  addPreviousMembers() {    
+  addPreviousMembers() {
     // additionalMembers nimmt die zusätzlichen Members auf und fügt die bisherigen Members (einmal) hinzu
     if (!this.previousAdded) {
       this.previousAdded = true;
@@ -113,28 +116,30 @@ export class ChannelComponent {
   }
 
   /**
- * Gibt eine Vorschau der Anzahl der Mitglieder zurück.
- *
- * @remarks
- * Diese Funktion gibt entweder die Anzahl der Mitglieder oder den Text '4+' zurück,
- * je nachdem, ob die Anzahl der Mitglieder kleiner als 5 ist.
- *
- * @returns Eine Zeichenkette, die die Vorschau der Anzahl der Mitglieder darstellt.
- */
+   * Gibt eine Vorschau der Anzahl der Mitglieder zurück.
+   *
+   * @remarks
+   * Diese Funktion gibt entweder die Anzahl der Mitglieder oder die Anzahl der restlichen Mitglieder zurück,
+   * je nachdem, ob die Anzahl der Mitglieder kleiner als 5 ist.
+   *
+   * @returns Eine Zeichenkette, die die Vorschau der Anzahl der Mitglieder darstellt.
+   */
   previewNumberMembers(): string {
     let numberMembers = this.clickedChannel.members.length;
-    // let numberMembersString = numberMembers.toString();
-
-    return numberMembers < 5 ? numberMembers.toString() : '4+';
+    if (numberMembers < 5) {
+      return numberMembers.toString();
+    } else {
+      return '+' + (numberMembers - 4).toString();
+    }
   }
 
   /**
- * Speichert den geänderten Kanalnamen.
- *
- * @remarks
- * Diese Funktion aktualisiert den Kanalnamen über den ChannelService und schaltet
- * anschließend die Bearbeitung des Namens aus.
- */
+   * Speichert den geänderten Kanalnamen.
+   *
+   * @remarks
+   * Diese Funktion aktualisiert den Kanalnamen über den ChannelService und schaltet
+   * anschließend die Bearbeitung des Namens aus.
+   */
   saveName() {
     this.cs.updateChannel(
       { name: this.clickedChannel.name },
@@ -144,12 +149,12 @@ export class ChannelComponent {
   }
 
   /**
- * Speichert die geänderte Kanalbeschreibung.
- *
- * @remarks
- * Diese Funktion aktualisiert die Kanalbeschreibung über den ChannelService und schaltet
- * anschließend die Bearbeitung der Beschreibung aus.
- */
+   * Speichert die geänderte Kanalbeschreibung.
+   *
+   * @remarks
+   * Diese Funktion aktualisiert die Kanalbeschreibung über den ChannelService und schaltet
+   * anschließend die Bearbeitung der Beschreibung aus.
+   */
   saveDescription() {
     this.cs.updateChannel(
       { description: this.clickedChannel.description },
@@ -159,20 +164,20 @@ export class ChannelComponent {
   }
 
   /**
- * Fügt ein Mitglied zum Kanal hinzu.
- *
- * @remarks
- * Diese Funktion aktualisiert die Mitgliederliste des Kanals über den ChannelService
- * unter Verwendung der bereinigten JSON-Daten der zusätzlichen Mitglieder.
- * Anschließend wird das Fenster zum Hinzufügen von Mitgliedern geschlossen und die
- * Liste der zusätzlichen Mitglieder wird zurückgesetzt.
- */
-  addAMember(){    
+   * Fügt ein Mitglied zum Kanal hinzu.
+   *
+   * @remarks
+   * Diese Funktion aktualisiert die Mitgliederliste des Kanals über den ChannelService
+   * unter Verwendung der bereinigten JSON-Daten der zusätzlichen Mitglieder.
+   * Anschließend wird das Fenster zum Hinzufügen von Mitgliedern geschlossen und die
+   * Liste der zusätzlichen Mitglieder wird zurückgesetzt.
+   */
+  addAMember() {
     this.cs.updateChannel(
       { members: this.cs.getCleanMemberJson(this.additionalMembers) },
       this.clickedChannel
     );
     this.switchShowAddMembersInExistingChannel();
-    this.additionalMembers = []
+    this.additionalMembers = [];
   }
 }
