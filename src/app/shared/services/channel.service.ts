@@ -316,7 +316,7 @@ export class ChannelService {
           return true;
         }
       } catch {
-        return false
+        return false;
       }
       return false;
     }

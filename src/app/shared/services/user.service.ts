@@ -92,6 +92,7 @@ export class UserService {
    */
   async updateDefaultUser(newValue: any, customId: string) {
     let docRef = this.getSingleDocRef('allUsers', customId);
+    console.log('wurde angelegt');
     await updateDoc(docRef, newValue)
       .catch((err) => {
         console.error(err);
@@ -112,6 +113,23 @@ export class UserService {
     return doc(collection(this.firestore, colId), realDocId);
   }
 
+  /*
+  async addExampleChatsToNewUser(customId: string, defaultMessage: Message) {
+    const q = query(this.allUserCol, where('customId', '==', customId));
+    let existingChats: any = [];
+    return onSnapshot(q, (list) => {
+      list.forEach((element) => {
+        existingChats.push(element.data()['chats'][0]);
+        existingChats.push(defaultMessage);
+      });
+    });
+    console.log('test');
+
+    this.updateDefaultUser({ chats: existingChats }, customId);
+    existingChats = [];
+  }
+  */
+
   /**
    * Sucht den Benutzer in der myUsers-Liste basierend auf seiner customId.
    * @param loggedInUser - Der eingeloggte Benutzer.
@@ -121,6 +139,21 @@ export class UserService {
     for (let index = 0; index < this.myUsers.length; index++) {
       const user = this.myUsers[index];
       if (user.customId == loggedInUser.customId) {
+        return user;
+      }
+    }
+    return new User();
+  }
+
+  /**
+   * Retrieves a user based on the provided user ID.
+   * @param {string} userId - The ID of the user to retrieve.
+   * @returns {User} The user corresponding to the provided ID, or a new User object if not found.
+   */
+  getUserBasedOnId(userId: string): User {
+    for (let index = 0; index < this.myUsers.length; index++) {
+      const user = this.myUsers[index];
+      if (user.customId == userId) {
         return user;
       }
     }

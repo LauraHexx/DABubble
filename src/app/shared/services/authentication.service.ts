@@ -66,7 +66,7 @@ export class AuthenticationService {
         const user = userCredential.user;
         newUser.customId = user.uid;
         newUser.status = 'offline';
-        newUser.chats = this.createDefaultChat(user.uid);
+        // newUser.chats = this.createDefaultChat(user.uid);
       })
       .then(() => {
         this.userService.sendDocToDB(newUser);
@@ -80,10 +80,10 @@ export class AuthenticationService {
       });
   }
 
-  /**
-   * Creates a default chat for the new user.
-   * @returns {Message[]} - An array containing the default chat messages.
-   */
+  /*
+
+  
+  
   createDefaultChat(newUserId: string) {
     let messages: Message[] = [];
 
@@ -107,7 +107,6 @@ export class AuthenticationService {
       },
     ];
 
-    // Nachrichten für den Standard-Chat erstellen und Beispielbenutzern zuweisen
     exampleUsers.forEach((user) => {
       const messageId = Date.now();
       const defaultMessage = this.createDefaultMessage(
@@ -115,11 +114,18 @@ export class AuthenticationService {
         user.defaultUserId,
         user.messageText
       );
+
+      let newMessage: any =
+        this.userService.getCleanMessageJson(defaultMessage);
+
       messages.push(defaultMessage);
+
       if (user.defaultUserId != newUserId) {
-        this.userService.updateDefaultUser(
-          { chats: [this.userService.getCleanMessageJson(defaultMessage)] },
-          user.defaultUserId
+        console.log('userService');
+
+        this.userService.addExampleChatsToNewUser(
+          user.defaultUserId,
+          newMessage
         );
       }
     });
@@ -145,6 +151,8 @@ export class AuthenticationService {
       )
     );
   }
+
+  */
 
   /**
    * Signs up a user using Google authentication.
@@ -210,7 +218,7 @@ export class AuthenticationService {
    * Initializes user chats with a default message and sends user data to the database.
    */
   addNewGoogleUser(newUserId: string) {
-    this.loggedGoggleUser.chats = this.createDefaultChat(newUserId);
+    //this.loggedGoggleUser.chats = this.createDefaultChat(newUserId);
     this.userService.sendDocToDB(this.loggedGoggleUser);
   }
 

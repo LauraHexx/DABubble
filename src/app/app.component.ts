@@ -1,3 +1,6 @@
+import { LoginComponent } from './components/login/login.component';
+import { DefaultDataService } from './shared/services/default-data.service';
+import { WorkspaceService } from 'src/app/shared/services/workspace.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { AnimationsService } from 'src/app/shared/services/animations.service';
 import { Router, NavigationEnd } from '@angular/router';
@@ -10,6 +13,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { Subscription, combineLatest } from 'rxjs';
+import { Channel } from 'src/app/models/channel';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +31,9 @@ export class AppComponent {
     public animations: AnimationsService,
     private renderer: Renderer2,
     private el: ElementRef,
-    private zone: NgZone
+    private zone: NgZone,
+    private workspaceService: WorkspaceService,
+    private defaultDataService: DefaultDataService
   ) {
     this.auth.getGoogleUserData();
   }
@@ -56,6 +62,7 @@ export class AppComponent {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.auth.checkIfUserIslogged();
+        this.checkIfNewUser();
       }
     });
   }
@@ -85,5 +92,29 @@ export class AppComponent {
         this.renderer.setStyle(container, 'zIndex', 20);
       });
     }
+  }
+
+  /**
+   * Checks if the current user is a new user based on the number of channels logged in.
+   * If the user is new, creates default channels.
+   * @returns {void}
+   */
+  checkIfNewUser() {
+    const currentRoute = this.router.url;
+    if (currentRoute.includes('dashboard')) {
+      const channelsLoggedUser = this.workspaceService.getChannels().length;
+      if (this.newUser(channelsLoggedUser)) {
+        this.defaultDataService.createDefaultChannels();
+      }
+    }
+  }
+
+  /**
+   * Checks if a user is new based on the number of channels logged in.
+   * @param {number} channelsLoggedUser - The number of channels logged in.
+   * @returns {boolean} True if the user is new, otherwise false.
+   */
+  newUser(channelsLoggedUser: number) {
+    return channelsLoggedUser === 0;
   }
 }

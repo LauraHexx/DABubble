@@ -116,7 +116,6 @@ export class WorkspaceService {
         return onlyMyChannels;
       }
     } catch (err) {
-      console.error('Keine bearbeitbaren Channels.');
       return [];
     }
   }
