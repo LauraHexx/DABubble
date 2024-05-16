@@ -45,6 +45,10 @@ export class AppComponent {
     this.setAnimationContainer();
   }
 
+  /**
+   * Sets the background color of the body based on the current route.
+   * @returns {void}
+   */
   setBodyBgColor() {
     const currentRoute = this.router.url;
     if (currentRoute.includes('google-screen')) {
@@ -54,10 +58,18 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Resets the overflow style of the body.
+   * @returns {void}
+   */
   resetBodyOverflow() {
     document.body.style.overflow = 'unset';
   }
 
+  /**
+   * Checks if a user is logged in when a new route is navigated to.
+   * @returns {void}
+   */
   checkUserLoggedWhenNewRoute() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -67,6 +79,12 @@ export class AppComponent {
     });
   }
 
+  /**
+   * Sets the style of the body viewport height based on emailWasSent and newUserSuccess flags.
+   * @param {boolean} emailWasSent - Flag indicating if an email was sent.
+   * @param {boolean} newUserSuccess - Flag indicating if a new user was successfully registered.
+   * @returns {void}
+   */
   setAnimationContainer() {
     this.animationsSubscription = combineLatest([
       this.animations.emailWasSent$,
@@ -76,10 +94,20 @@ export class AppComponent {
     });
   }
 
+  /**
+   * Unsubscribes from the animationsSubscription to prevent memory leaks.
+   * @returns {void}
+   */
   ngOnDestroy() {
     this.animationsSubscription.unsubscribe();
   }
 
+  /**
+   * Sets the style of the body viewport height based on emailWasSent and newUserSuccess flags.
+   * @param {boolean} emailWasSent - Flag indicating if an email was sent.
+   * @param {boolean} newUserSuccess - Flag indicating if a new user was successfully registered.
+   * @returns {void}
+   */
   setStyleBodyViewportHeight(emailWasSent: boolean, newUserSuccess: boolean) {
     const container = this.el.nativeElement.querySelector('.overlay-container');
     const viewportHeight = window.innerHeight;
